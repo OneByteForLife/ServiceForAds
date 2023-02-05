@@ -1,0 +1,36 @@
+version: '3'
+
+networks:
+  in.net.ex:
+    driver: bridge # Standard tunnel-type network driver
+
+
+services:
+  ads-service:
+    build: .
+    container_name: ads-service.in.net.ex
+    volumes:
+      - ./config/config.yaml:/config.yaml:ro # Only read
+    ports:
+      - 8080:8080
+    networks:
+      - in.net.ex
+    depends_on:
+      - ads-db
+
+  ads-db:
+      restart: always
+      image: postgres:15
+      container_name: ads-db.in.net.ex
+      environment:
+        - POSTGRES_DB=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - PGDATA=/var/lib/postgresql/data/pgdata
+      volumes:
+        - ./sql:/docker-entrypoint-initdb.d 
+      ports:
+        - 5432:5432
+      networks:
+        - in.net.ex
+      
