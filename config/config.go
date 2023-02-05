@@ -18,6 +18,7 @@ type Config struct {
 	} `yaml:"database"`
 }
 
+// Чтение конфига
 func ReadConfig() *Config {
 	var config *Config
 	file, err := os.ReadFile("config.yaml")
