@@ -132,7 +132,7 @@ curl --request GET \
   --url 'http://localhost:8080/api/v1/ads/get?id=1'
 ```
 
-### **/api/v1/ads/get/all?limit=10&offset=0**
+### **/api/v1/ads/get/all?limit={int}&offset={int}**
 
 `GET` : Получение всех объявлений с указанием пагинации.
 
@@ -143,7 +143,7 @@ curl --request GET \
   --url 'http://localhost:8080/api/v1/ads/get/all?limit=10&offset=0'
 ```
 
-### **/api/v1/ads/get/all?limit=10&offset=0&sortBy=price&sortType=desc**
+### **/api/v1/ads/get/all?limit={int}&offset={int}&sortBy={string}&sortType={string}**
 
 `GET` : Получение всех объявлений с указанием пагинации.
 
