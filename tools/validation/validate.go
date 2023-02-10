@@ -3,27 +3,36 @@ package validation
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 	"strings"
+)
+
+const (
+	date  = "date_create"
+	price = "price"
+	asc   = "asc"
+	desc  = "desc"
 )
 
 // Для валидации url фотографий
 func ValideteUrlPicture(url string) error {
-	if !strings.Contains(url, "http://") || !strings.Contains(url, "https://") {
-		return errors.New("url addr is not valid")
+	if !strings.Contains(url, "http://") && !strings.Contains(url, "https://") {
+		return fmt.Errorf("%s is wrong", url)
 	}
 
-	if len(url) <= 0 || len(url) >= 1000 {
+	if len(url) <= 0 && len(url) > 1000 {
 		return errors.New("the length of the address exceeds the allowable length")
 	}
 
-	var shareds []string = []string{".jpg", ".jpeg", ".png"}
-	for idx, shared := range shareds {
-		if !strings.Contains(url, shared) {
-			return fmt.Errorf("the %s of the photo under index %d is not valid", shared, idx)
-		}
+	switch {
+	case filepath.Ext(url) == ".jpg":
+		return nil
+	case filepath.Ext(url) == ".jpeg":
+		return nil
+	case filepath.Ext(url) == ".png":
+		return nil
 	}
-
-	return nil
+	return fmt.Errorf("error the link to the %s is not correct", url)
 }
 
 // Для валидации названия и описания
@@ -34,6 +43,27 @@ func ValideteText(text string) error {
 
 	if len(text) > 1000 {
 		return errors.New("product description must have more than 1000 characters")
+	}
+
+	return nil
+}
+
+// Валидация url параметров
+func ValidateUrlQuery(limit string, offset string, sortBy string, sortType string) error {
+	if limit == "" && offset == "" {
+		return errors.New("error parameters for pagination are mandatory")
+	}
+
+	if sortBy == "" && sortType == "" {
+		return nil
+	}
+
+	if sortBy != date && sortBy != price {
+		return fmt.Errorf("error params for sorting - %s", sortBy)
+	}
+
+	if sortType != asc && sortType != desc {
+		return fmt.Errorf("error type for sorting - %s", sortType)
 	}
 
 	return nil
