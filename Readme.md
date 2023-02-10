@@ -159,3 +159,11 @@ curl --request GET \
 curl --request GET \
   --url 'http://localhost:8080/api/v1/ads/get/all?limit=10&offset=0&sortBy=price&sortType=desc'
 ```
+
+## Разработчики
+
+- [OneByteForLife](https://github.com/OneByteForLife)
+  
+## Лицензия
+
+- Это программное обеспечение защищено лицензией MIT!
