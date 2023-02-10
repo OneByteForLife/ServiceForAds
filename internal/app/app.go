@@ -13,10 +13,8 @@ import (
 )
 
 func Run(conf *config.Config) {
-	pool, err := database.ConnectToDatabase(conf)
-	if err != nil {
-		logrus.Errorf("error connect to database: %s", err)
-	}
+
+	pool := database.ConnectToDatabase(conf)
 
 	api := adshandler.NewHandler(usecase.NewService(usecase.NewStorage(pool)))
 

@@ -34,7 +34,7 @@ func (h *AdsHandler) GetAdsByID(c *fiber.Ctx) error {
 func (h *AdsHandler) GetAllAds(c *fiber.Ctx) error {
 	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSONCharsetUTF8)
 
-	ads, err := h.service.GetAll(c.Query("limit"), c.Query("offset"))
+	ads, err := h.service.GetAll(c.Query("limit"), c.Query("offset"), c.Query("sortBy"), c.Query("sortType"))
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(webapi.ResponseBody("1.0.0", webapi.BadRequest, http.StatusBadRequest, err.Error()))
 	}

@@ -31,14 +31,14 @@ func (s *AdsStorage) GetOne(id int) (entity.Advertisements, error) {
 }
 
 // Выборка всех объявлений
-func (s *AdsStorage) GetAll(limit int, offset int) ([]entity.Advertisements, error) {
+func (s *AdsStorage) GetAll(limit int, offset int, sortBy string, sortType string) ([]entity.Advertisements, error) {
 	var ads []entity.Advertisements
 
 	var query string
-	if limit == 0 && offset == 0 {
-		query = "SELECT * FROM advertisements LIMIT 10 OFFSET 0"
-	} else {
+	if sortBy == "" && sortType == "" {
 		query = fmt.Sprintf("SELECT * FROM advertisements LIMIT %d OFFSET %d", limit, offset)
+	} else {
+		query = fmt.Sprintf("SELECT * FROM advertisements ORDER BY %s %s LIMIT %d OFFSET %d ", sortBy, sortType, limit, offset)
 	}
 
 	rows, err := s.pool.Query(context.Background(), query)
@@ -60,7 +60,7 @@ func (s *AdsStorage) GetAll(limit int, offset int) ([]entity.Advertisements, err
 
 // Добавления объявления
 func (s *AdsStorage) Create(ads entity.Advertisements) error {
-	_, err := s.pool.Exec(context.Background(), "INSERT INTO advertisements (product_name, product_description, product_main_picture, product_more_pictures, product_date_create, price) VALUES ($1, $2, $3, $4, $5, $6)",
+	_, err := s.pool.Exec(context.Background(), "INSERT INTO advertisements (product_name, product_description, product_main_picture, product_more_pictures, date_create, price) VALUES ($1, $2, $3, $4, $5, $6)",
 		ads.ProductName,
 		ads.Description,
 		ads.MainPicture,
