@@ -123,7 +123,8 @@ curl --request POST \
 }'
 ```
 
-### **/api/v1/ads/get?id={int}**
+### **/api/v1/ads/get**
+    id={int}
 
 `GET` : Получение объявления по его ID
 
@@ -132,7 +133,9 @@ curl --request GET \
   --url 'http://localhost:8080/api/v1/ads/get?id=1'
 ```
 
-### **/api/v1/ads/get/all?limit={int}&offset={int}**
+### **/api/v1/ads/get/all**
+    limit={int}
+    offset={int}
 
 `GET` : Получение всех объявлений с указанием пагинации.
 
@@ -143,9 +146,13 @@ curl --request GET \
   --url 'http://localhost:8080/api/v1/ads/get/all?limit=10&offset=0'
 ```
 
-### **/api/v1/ads/get/all?limit={int}&offset={int}&sortBy={string}&sortType={string}**
+### **/api/v1/ads/get/all**
+    limit={int}
+    offset={int}
+    sortBy={string}
+    sortType={string}
 
-`GET` : Получение всех объявлений с указанием пагинации.
+`GET` : Получение всех объявлений с указанием пагинации и сортировкой.
 
 #### Список доступных параметров для сортировки:
 - price
