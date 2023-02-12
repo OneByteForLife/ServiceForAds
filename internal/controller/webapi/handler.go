@@ -1,4 +1,4 @@
-package adshandler
+package webapi
 
 import "github.com/gofiber/fiber/v2"
 

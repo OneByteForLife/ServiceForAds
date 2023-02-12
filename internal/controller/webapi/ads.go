@@ -1,7 +1,6 @@
-package adshandler
+package webapi
 
 import (
-	"ServiceForAds/internal/controller/webapi"
 	usecase "ServiceForAds/internal/usecase/ads"
 	"net/http"
 
@@ -21,12 +20,12 @@ func (h *AdsHandler) GetAdsByID(c *fiber.Ctx) error {
 
 	ads, err := h.service.GetOne(c.Query("id"))
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(webapi.ResponseBody("1.0.0", webapi.BadRequest, http.StatusBadRequest, err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(ResponseBody("1.0.0", BadRequest, http.StatusBadRequest, err.Error()))
 	}
 
-	return c.Status(http.StatusOK).JSON(webapi.ResponseBody(
+	return c.Status(http.StatusOK).JSON(ResponseBody(
 		"1.0.0",
-		webapi.Success,
+		Success,
 		http.StatusOK,
 		ads))
 }
@@ -36,12 +35,12 @@ func (h *AdsHandler) GetAllAds(c *fiber.Ctx) error {
 
 	ads, err := h.service.GetAll(c.Query("limit"), c.Query("offset"), c.Query("sortBy"), c.Query("sortType"))
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(webapi.ResponseBody("1.0.0", webapi.BadRequest, http.StatusBadRequest, err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(ResponseBody("1.0.0", BadRequest, http.StatusBadRequest, err.Error()))
 	}
 
-	return c.Status(http.StatusOK).JSON(webapi.ResponseBody(
+	return c.Status(http.StatusOK).JSON(ResponseBody(
 		"1.0.0",
-		webapi.Success,
+		Success,
 		http.StatusOK,
 		ads))
 }
@@ -51,12 +50,12 @@ func (h *AdsHandler) CreateAds(c *fiber.Ctx) error {
 
 	err := h.service.Create(c.Body())
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(webapi.ResponseBody("1.0.0", webapi.BadRequest, http.StatusBadRequest, err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(ResponseBody("1.0.0", BadRequest, http.StatusBadRequest, err.Error()))
 	}
 
-	return c.Status(http.StatusOK).JSON(webapi.ResponseBody(
+	return c.Status(http.StatusOK).JSON(ResponseBody(
 		"1.0.0",
-		webapi.Success,
+		Success,
 		http.StatusOK,
 		nil))
 }

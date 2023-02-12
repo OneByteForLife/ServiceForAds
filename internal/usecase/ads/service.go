@@ -2,8 +2,8 @@ package ads
 
 import (
 	"ServiceForAds/internal/entity"
-	"ServiceForAds/tools/conv"
-	"ServiceForAds/tools/validation"
+	"ServiceForAds/utils/conv"
+	"ServiceForAds/utils/validation"
 	"encoding/json"
 	"errors"
 	"fmt"
