@@ -13,6 +13,7 @@ import (
 func ConnectToDatabase(conf *config.Config) *pgxpool.Pool {
 	url := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s&pool_max_conns=50", conf.Database.Username, conf.Database.Password, conf.Database.Host, conf.Database.Port, conf.Database.Dbname, conf.Database.Sslmode)
 	pool, err := pgxpool.Connect(context.Background(), url)
+	// При ошибке реконект с тайм аутом в 10 сек, по средствам рекурсии.
 	if err != nil {
 		logrus.Errorf("database connection failed: %v [starting reconnect]", err)
 		time.Sleep(time.Second * 10)
