@@ -3,9 +3,10 @@ package ads
 import (
 	"ServiceForAds/internal/entity"
 	"context"
-	"fmt"
 
+	"github.com/doug-martin/goqu/v9"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
 
@@ -17,11 +18,18 @@ func NewStorage(pool *pgxpool.Pool) Storage {
 	return &AdsStorage{pool}
 }
 
+const (
+	advertisements = "advertisements" // Таблица с товарами
+)
+
 // Выборка по id объявленияw
 func (s *AdsStorage) GetOne(id int) (entity.Advertisements, error) {
 	var ads entity.Advertisements
 
-	query := fmt.Sprintf("SELECT * FROM advertisements WHERE id = %d", id)
+	query, _, _ := goqu.From(advertisements).Where(goqu.ExOr{
+		"id": id,
+	}).ToSQL()
+
 	err := s.pool.QueryRow(context.Background(), query).Scan(&ads.ID, &ads.ProductName, &ads.Description, &ads.MainPicture, &ads.MorePictures, &ads.DateCreate, &ads.Price)
 	if err != nil {
 		return ads, err
@@ -36,15 +44,22 @@ func (s *AdsStorage) GetAll(limit int, offset int, sortBy string, sortType strin
 
 	var query string
 	if sortBy == "" && sortType == "" {
-		query = fmt.Sprintf("SELECT * FROM advertisements LIMIT %d OFFSET %d", limit, offset)
-	} else {
-		query = fmt.Sprintf("SELECT * FROM advertisements ORDER BY %s %s LIMIT %d OFFSET %d ", sortBy, sortType, limit, offset)
+		query, _, _ = goqu.From(advertisements).Limit(uint(limit)).Offset(uint(offset)).ToSQL()
+	}
+
+	switch {
+	case sortType == "asc" || sortType == "ASC":
+		query, _, _ = goqu.From(advertisements).OrderAppend(goqu.I(sortBy).Asc()).Limit(uint(limit)).Offset(uint(offset)).ToSQL()
+	case sortType == "desc" || sortType == "DESC":
+		query, _, _ = goqu.From(advertisements).OrderAppend(goqu.I(sortBy).Asc()).Limit(uint(limit)).Offset(uint(offset)).ToSQL()
 	}
 
 	rows, err := s.pool.Query(context.Background(), query)
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	var temp entity.Advertisements
 	for rows.Next() {
@@ -60,16 +75,23 @@ func (s *AdsStorage) GetAll(limit int, offset int, sortBy string, sortType strin
 
 // Добавления объявления
 func (s *AdsStorage) Create(ads entity.Advertisements) error {
-	_, err := s.pool.Exec(context.Background(), "INSERT INTO advertisements (product_name, product_description, product_main_picture, product_more_pictures, date_create, price) VALUES ($1, $2, $3, $4, $5, $6)",
-		ads.ProductName,
-		ads.Description,
-		ads.MainPicture,
-		ads.MorePictures,
-		ads.DateCreate,
-		ads.Price,
-	)
+	ds := goqu.Insert(advertisements).
+		Cols("product_name", "product_description", "product_main_picture", "product_more_pictures", "date_create", "price").
+		Vals(
+			goqu.Vals{
+				&ads.ProductName,
+				&ads.Description,
+				&ads.MainPicture,
+				pq.Array(&ads.MorePictures), // Пришлось юзать pq.Array из за того что goqu.Insert не правилно преобразовывал массивы
+				&ads.DateCreate, &ads.Price,
+			})
+
+	query, _, _ := ds.ToSQL()
+
+	_, err := s.pool.Exec(context.Background(), query)
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
