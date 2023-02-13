@@ -6,8 +6,8 @@ CREATE TABLE advertisements (
     id SERIAL PRIMARY KEY,
     product_name text not null,
     product_description varchar(1000) not null,
-    product_main_picture text not null,
-    product_more_pictures text array,
+    product_main_picture varchar(1000) not null,
+    product_more_pictures varchar(1000) array,
     date_create timestamp not null,
     price decimal(8, 2) not null
 );
