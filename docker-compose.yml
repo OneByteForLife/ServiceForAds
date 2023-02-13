@@ -20,7 +20,7 @@ services:
 
   ads-db:
       restart: always
-      image: postgres:13
+      image: postgres:11.5
       container_name: ads-db.in.net.ex
       environment:
         - POSTGRES_DB=postgres
