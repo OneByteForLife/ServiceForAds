@@ -1,36 +1,44 @@
 version: '3'
 
 networks:
-  in.net.ex:
-    driver: bridge # Standard tunnel-type network driver
-
+  back.end:
+    driver: bridge
 
 services:
+  haproxy:
+    image: "haproxy:2.2-alpine"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    ports:
+      - 80:80
+    depends_on:
+      - ads-service
+    networks:
+      - back.end
+
   ads-service:
     build: .
-    container_name: ads-service.in.net.ex
+    container_name: ads-service
     volumes:
       - ./config/config.yaml:/config.yaml:ro # Only read
-    ports:
-      - 8080:8080
-    networks:
-      - in.net.ex
     depends_on:
       - ads-db
+    networks:
+      - back.end
 
   ads-db:
-      restart: always
-      image: postgres:11.5
-      container_name: ads-db.in.net.ex
-      environment:
-        - POSTGRES_DB=postgres
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=admin
-        - PGDATA=/var/lib/postgresql/data/pgdata
-      volumes:
-        - ./sql:/docker-entrypoint-initdb.d 
-      ports:
-        - 5432:5432
-      networks:
-        - in.net.ex
+    restart: always
+    image: postgres:11.5
+    container_name: ads-db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d 
+    ports:
+      - 5432:5432
+    networks:
+      - back.end
       
