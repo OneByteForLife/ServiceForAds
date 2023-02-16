@@ -76,7 +76,7 @@
   
 ## API Спецификация
 
-URL - http://localhost:8080
+URL - http://localhost:80
 
 ### **/api/v1**
 
@@ -84,7 +84,7 @@ URL - http://localhost:8080
 
 ```
 curl --request GET \
-    --url http://localhost:8080/api/v1/
+    --url http://localhost:80/api/v1/
 ```
 
 ### **/api/v1/ads/create**
@@ -122,7 +122,7 @@ curl --request GET \
 
 ```
 curl --request POST \
-  --url http://localhost:8080/api/v1/ads/create \
+  --url http://localhost:80/api/v1/ads/create \
   --header 'Content-Type: application/json' \
   --data '{
     "product_name": "Iphone 5s 64GB",
@@ -146,7 +146,7 @@ curl --request POST \
 
 ```
 curl --request GET \
-  --url 'http://localhost:8080/api/v1/ads/get?id=1'
+  --url 'http://localhost:80/api/v1/ads/get?id=1'
 ```
 
 ### **/api/v1/ads/get/all**
@@ -159,7 +159,7 @@ curl --request GET \
 
 ```
 curl --request GET \
-  --url 'http://localhost:8080/api/v1/ads/get/all?limit=10&offset=0'
+  --url 'http://localhost:80/api/v1/ads/get/all?limit=10&offset=0'
 ```
 
 ### **/api/v1/ads/get/all**
@@ -180,7 +180,7 @@ curl --request GET \
 
 ```
 curl --request GET \
-  --url 'http://localhost:8080/api/v1/ads/get/all?limit=10&offset=0&sortBy=price&sortType=desc'
+  --url 'http://localhost:80/api/v1/ads/get/all?limit=10&offset=0&sortBy=price&sortType=desc'
 ```
 
 ## Разработчики
