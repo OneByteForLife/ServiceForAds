@@ -60,11 +60,11 @@ func ValidateUrlQuery(limit string, offset string, sortBy string, sortType strin
 	}
 
 	if _, err := strconv.Atoi(limit); err != nil {
-		return fmt.Errorf("error the %s parameter cannot be a string", limit)
+		return err
 	}
 
 	if _, err := strconv.Atoi(offset); err != nil {
-		return fmt.Errorf("error the %s parameter cannot be a string", offset)
+		return err
 	}
 
 	if sortBy != date && sortBy != price {
