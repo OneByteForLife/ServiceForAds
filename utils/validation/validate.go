@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -56,6 +57,14 @@ func ValidateUrlQuery(limit string, offset string, sortBy string, sortType strin
 
 	if sortBy == "" && sortType == "" {
 		return nil
+	}
+
+	if _, err := strconv.Atoi(limit); err != nil {
+		return fmt.Errorf("error the %s parameter cannot be a string", limit)
+	}
+
+	if _, err := strconv.Atoi(offset); err != nil {
+		return fmt.Errorf("error the %s parameter cannot be a string", offset)
 	}
 
 	if sortBy != date && sortBy != price {
