@@ -5,7 +5,7 @@ import (
 	"ServiceForAds/internal/controller/webapi"
 
 	usecase "ServiceForAds/internal/usecase/ads"
-	"ServiceForAds/pkg/database"
+	"ServiceForAds/utils/database"
 )
 
 func Run(conf *config.Config) {

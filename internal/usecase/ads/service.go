@@ -54,7 +54,7 @@ func (s *AdsService) GetAll(limit string, offset string, sortBy string, sortType
 }
 
 func (s *AdsService) Create(body []byte) error {
-	ads, err := unmarsalObject(body)
+	ads, err := shapingObj(body)
 	if err != nil {
 		return err
 	}
@@ -67,7 +67,7 @@ func (s *AdsService) Create(body []byte) error {
 	return nil
 }
 
-func unmarsalObject(data []byte) (entity.Advertisements, error) {
+func shapingObj(data []byte) (entity.Advertisements, error) {
 	var ads entity.Advertisements
 
 	if err := json.Unmarshal(data, &ads); err != nil {

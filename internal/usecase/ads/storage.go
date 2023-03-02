@@ -48,9 +48,9 @@ func (s *AdsStorage) GetAll(limit int, offset int, sortBy string, sortType strin
 	}
 
 	switch {
-	case sortType == "asc" || sortType == "ASC":
+	case sortType == "asc":
 		query, _, _ = goqu.From(advertisements).OrderAppend(goqu.I(sortBy).Asc()).Limit(uint(limit)).Offset(uint(offset)).ToSQL()
-	case sortType == "desc" || sortType == "DESC":
+	case sortType == "desc":
 		query, _, _ = goqu.From(advertisements).OrderAppend(goqu.I(sortBy).Asc()).Limit(uint(limit)).Offset(uint(offset)).ToSQL()
 	}
 
@@ -82,7 +82,7 @@ func (s *AdsStorage) Create(ads entity.Advertisements) error {
 				&ads.ProductName,
 				&ads.Description,
 				&ads.MainPicture,
-				pq.Array(&ads.MorePictures), // Пришлось юзать pq.Array из за того что goqu.Insert не правилно преобразовывал массивы
+				pq.Array(&ads.MorePictures), // Пришлось юзать pq.Array из за того что goqu.Insert не правильно преобразовывал массивы
 				&ads.DateCreate, &ads.Price,
 			})
 

@@ -3,7 +3,7 @@ package main
 import (
 	"ServiceForAds/config"
 	"ServiceForAds/internal/app"
-	"ServiceForAds/pkg/log"
+	"ServiceForAds/utils/log"
 )
 
 func main() {
